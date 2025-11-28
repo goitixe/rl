@@ -1,16 +1,27 @@
+import time
 import gymnasium as gym
-import minigrid
+from pacman_env.pacman import PacmanEnv
 
-env = gym.make("MiniGrid-Empty-8x8-v0", render_mode="rgb_array")
+if __name__ == "__main__":
+    
+    #tamaño 13 para coincidir con la logica del mapa
+    env = PacmanEnv(render_mode="human", size=13, num_ghosts=3)
+    
+    obs, _ = env.reset()
+    print("entorno pacman cargado")
 
-obs, info = env.reset()
-print("Obs type:", type(obs))
-print("Obs content:", obs)
+    for i in range(1000):
+        action = env.action_space.sample()
+        
+        obs, reward, terminated, truncated, info = env.step(action)
+        
+        print(f"step {i}: reward={reward}, over={terminated}")
+        
+        env.render()
+        time.sleep(0.1)
 
-for _ in range(5):
-    action = env.action_space.sample()
-    obs, reward, terminated, truncated, info = env.step(action)
-    print("Step -> reward:", reward, "terminated:", terminated, "truncated:", truncated)
+        if terminated or truncated:
+            print("reset")
+            env.reset()
 
-env.close()
-print("MiniGrid funciona correctamente ✅")
+    env.close()
