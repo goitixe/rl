@@ -41,8 +41,8 @@ if __name__ == "__main__":
         steps = 0
 
         while not (terminated or truncated):
-            #deterministic=True hace que la ia use su mejor jugada siempre
-            action, _state = model.predict(obs, deterministic=True)
+            #deterministic=True hace que la ia use su mejor jugada siempre, cambiado a false porque iba mal
+            action, _state = model.predict(obs, deterministic=False)
             
             obs, reward, terminated, truncated, info = env.step(action)
             total_reward += reward
